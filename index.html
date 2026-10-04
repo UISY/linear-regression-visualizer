@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linear Regression Trainer</title>
+  <meta name="description" content="Interaktive Lern-App für lineare Regression – direkt im Browser." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">ML Learning Lab · Projekt 1</div>
+      <h1>📈 Linear Regression Trainer</h1>
+      <p>Verstehen → ausprobieren → selbst vorhersagen → Wissen testen</p>
+    </div>
+    <div class="score-card">🏆 Lernpunkte <strong id="score">0</strong></div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel controls">
+      <h2>🎛️ Daten-Labor</h2>
+      <label>Anzahl Datenpunkte <span id="numPointsValue">12</span></label>
+      <input id="numPoints" type="range" min="5" max="40" value="12" step="1" />
+
+      <label>Wahre Steigung <span id="slopeValue">2.0</span></label>
+      <input id="slope" type="range" min="-5" max="5" value="2" step="0.1" />
+
+      <label>Achsenabschnitt <span id="interceptValue">5.0</span></label>
+      <input id="intercept" type="range" min="-10" max="10" value="5" step="0.5" />
+
+      <label>Streuung / Rauschen <span id="noiseValue">3.0</span></label>
+      <input id="noise" type="range" min="0" max="10" value="3" step="0.5" />
+
+      <label>Zufalls-Seed <span id="seedValue">42</span></label>
+      <input id="seed" type="range" min="0" max="100" value="42" step="1" />
+
+      <button id="resetScore" class="secondary">Punkte zurücksetzen</button>
+    </aside>
+
+    <section class="content">
+      <nav class="tabs" aria-label="Lernbereiche">
+        <button class="tab active" data-tab="understand">1️⃣ Verstehen</button>
+        <button class="tab" data-tab="explore">2️⃣ Ausprobieren</button>
+        <button class="tab" data-tab="predict">3️⃣ Vorhersagen</button>
+        <button class="tab" data-tab="quiz">4️⃣ Quiz</button>
+      </nav>
+
+      <section id="understand" class="tab-panel active">
+        <div class="learn-card">
+          <div class="badge">SCHRITT 1</div>
+          <h2>Was macht lineare Regression?</h2>
+          <p>Sie sucht eine Gerade, die möglichst gut zu vorhandenen Datenpunkten passt. Mit dieser Gerade kann das Modell anschließend einen <strong>kontinuierlichen Zahlenwert</strong> vorhersagen.</p>
+        </div>
+        <div class="three-col">
+          <article class="info-card"><h3>Eingabe (x)</h3><p>Zum Beispiel Maschinenalter, Fläche oder Temperatur.</p></article>
+          <article class="info-card"><h3>Modell</h3><p>Das Modell lernt aus Beispieldaten die bestmögliche Gerade.</p></article>
+          <article class="info-card"><h3>Ausgabe (y)</h3><p>Eine Zahl, z. B. Preis, Verbrauch oder Temperatur.</p></article>
+        </div>
+        <div class="formula">ŷ = b₀ + b₁x</div>
+        <p id="modelExplanation"></p>
+      </section>
+
+      <section id="explore" class="tab-panel">
+        <div class="section-head">
+          <div><h2>🎛️ Verändere die Daten</h2><p>Ändere links die Regler. Beobachte besonders, was bei mehr Rauschen mit R² passiert.</p></div>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card"><svg id="exploreChart" viewBox="0 0 800 480" role="img" aria-label="Datenpunkte mit Regressionsgerade"></svg></div>
+          <div class="metrics">
+            <div class="metric"><span>Gelernte Steigung</span><strong id="metricSlope">–</strong></div>
+            <div class="metric"><span>Achsenabschnitt</span><strong id="metricIntercept">–</strong></div>
+            <div class="metric"><span>R²</span><strong id="metricR2">–</strong></div>
+            <div class="metric"><span>MAE</span><strong id="metricMae">–</strong></div>
+            <div class="metric"><span>RMSE</span><strong id="metricRmse">–</strong></div>
+            <div id="fitMessage" class="feedback neutral"></div>
+          </div>
+        </div>
+        <details><summary>Was sind die gepunkteten Linien?</summary><p>Das sind <strong>Residuen</strong>: der Abstand zwischen echtem Datenpunkt und Modellvorhersage. Kleine Residuen bedeuten, dass die Gerade gut zum Punkt passt.</p></details>
+      </section>
+
+      <section id="predict" class="tab-panel">
+        <h2>🎯 Jetzt sagst du selbst voraus</h2>
+        <div class="prediction-controls">
+          <label>x-Wert <span id="predictionXValue">6.0</span></label>
+          <input id="predictionX" type="range" min="0" max="12" value="6" step="0.1" />
+          <label>Deine y-Schätzung <span id="guessValue">15.0</span></label>
+          <input id="guess" type="range" min="-30" max="50" value="15" step="0.1" />
+          <button id="checkPrediction">Vorhersage prüfen</button>
+          <div id="predictionFeedback" class="feedback neutral">Schätze zuerst einen Wert und prüfe anschließend.</div>
+        </div>
+        <div class="chart-card"><svg id="predictChart" viewBox="0 0 800 430" role="img" aria-label="Vorhersage auf Regressionsgerade"></svg></div>
+      </section>
+
+      <section id="quiz" class="tab-panel">
+        <h2>🧠 Anfänger-Quiz</h2>
+        <p>Für jede richtige Antwort gibt es einmalig <strong>10 Punkte</strong>.</p>
+        <div id="quizContainer"></div>
+        <div id="quizSummary" class="feedback neutral"></div>
+      </section>
+
+      <details class="data-details">
+        <summary>📋 Aktuelle Beispieldaten anzeigen</summary>
+        <div class="table-wrap"><table><thead><tr><th>x</th><th>y</th><th>Modellvorhersage</th><th>Residuum</th></tr></thead><tbody id="dataRows"></tbody></table></div>
+      </details>
+    </section>
+  </main>
+
+  <footer>ML Learning Lab · Projekt 1 · Linear Regression · Läuft komplett im Browser</footer>
+  <script src="script.js"></script>
+</body>
+</html>
