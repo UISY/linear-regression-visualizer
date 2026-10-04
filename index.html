@@ -6,14 +6,128 @@
   <title>Linear Regression Trainer</title>
   <meta name="description" content="Interaktive Lern-App für lineare Regression – direkt im Browser." />
   <style>
-:root{--bg:#f6f7fb;--card:#fff;--text:#18212f;--muted:#667085;--line:#d8dee9;--accent:#315efb;--accent2:#6c8cff;--good:#137a4b;--warn:#a15c00;--bad:#b42318;--shadow:0 10px 30px rgba(20,32,56,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-.topbar{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;padding:32px clamp(20px,5vw,64px) 18px;background:linear-gradient(135deg,#fff,#eef3ff);border-bottom:1px solid var(--line)}
-.eyebrow{font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}.topbar h1{font-size:clamp(2rem,4vw,3.2rem);margin:.25rem 0 .3rem}.topbar p{margin:0;color:var(--muted)}
-.score-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 18px;white-space:nowrap;box-shadow:var(--shadow)}
-.layout{display:grid;grid-template-columns:280px 1fr;gap:24px;padding:24px clamp(20px,5vw,64px) 40px;max-width:1500px;margin:auto}.panel,.content{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}.controls{padding:20px;position:sticky;top:16px;height:max-content}.controls h2{margin-top:0}.controls label,.prediction-controls label{display:flex;justify-content:space-between;gap:12px;margin-top:18px;font-weight:700}.controls input,.prediction-controls input{width:100%;accent-color:var(--accent)}
-button{border:0;background:var(--accent);color:white;padding:11px 15px;border-radius:12px;font-weight:800;cursor:pointer}button:hover{filter:brightness(.96)}button.secondary{background:#eef2ff;color:#233b88;width:100%;margin-top:24px}.content{padding:20px;min-width:0}.tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}.tab{background:#f2f4f7;color:#344054}.tab.active{background:var(--accent);color:white}.tab-panel{display:none;padding:22px 2px 4px}.tab-panel.active{display:block}.learn-card{border:1px solid var(--line);border-radius:18px;padding:22px;background:linear-gradient(135deg,#fff,#f6f8ff)}.badge{font-size:.78rem;font-weight:900;color:var(--accent);letter-spacing:.08em}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.info-card,.chart-card,.metric,.prediction-controls{border:1px solid var(--line);border-radius:16px;background:#fff}.info-card{padding:18px}.info-card h3{margin-top:0}.formula{font-size:clamp(2rem,5vw,4rem);font-family:Georgia,serif;text-align:center;padding:26px;margin:18px 0;border-radius:18px;background:#f8f9fc;border:1px dashed #b8c4de}.chart-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(220px,1fr);gap:18px}.chart-card{padding:10px;overflow:hidden}.chart-card svg{width:100%;height:auto;display:block}.metrics{display:grid;gap:10px}.metric{padding:14px}.metric span{display:block;color:var(--muted);font-size:.86rem}.metric strong{font-size:1.45rem}.feedback{padding:14px 16px;border-radius:14px;margin-top:14px;border:1px solid var(--line)}.feedback.good{background:#ecfdf3;color:var(--good);border-color:#abefc6}.feedback.warn{background:#fffaeb;color:var(--warn);border-color:#fedf89}.feedback.bad{background:#fef3f2;color:var(--bad);border-color:#fecdca}.feedback.neutral{background:#f8fafc;color:#475467}.prediction-controls{padding:18px;margin-bottom:16px}.prediction-controls button{margin-top:14px}.quiz-card{border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}.quiz-card h3{margin-top:0}.option{display:block;padding:10px 12px;margin:8px 0;border:1px solid var(--line);border-radius:12px;cursor:pointer}.option:hover{background:#f8faff}.option input{margin-right:8px}.data-details{margin-top:24px}.table-wrap{overflow:auto;margin-top:12px}table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}details{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:14px}summary{font-weight:800;cursor:pointer}footer{text-align:center;color:var(--muted);padding:0 20px 32px}.axis{stroke:#8b95a7;stroke-width:1.2}.grid{stroke:#e8ebf1;stroke-width:1}.reg-line{stroke:var(--accent);stroke-width:4;fill:none}.residual{stroke:#9aa4b2;stroke-width:1.4;stroke-dasharray:4 5}.point{fill:#111827;stroke:white;stroke-width:2}.prediction-point{fill:#fff;stroke:var(--accent);stroke-width:5}.tick{font-size:13px;fill:#667085}.axis-label{font-size:14px;font-weight:700;fill:#475467}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.controls{position:static}.chart-grid{grid-template-columns:1fr}.three-col{grid-template-columns:1fr}.topbar{flex-direction:column}.score-card{align-self:flex-start}}
+:root{
+  --bg:#f5f7ff;--card:#ffffff;--card-soft:#f9fbff;--text:#172033;--muted:#667085;
+  --line:#dce3f3;--accent:#5b5bf7;--accent2:#00a6d6;--accent3:#ff8a3d;
+  --good:#137a4b;--warn:#9a5b00;--bad:#b42318;--shadow:0 14px 38px rgba(35,54,110,.10);
+  --hero1:#eef1ff;--hero2:#eafcff;--hero3:#fff3e8;--grid:#e8edf8;--axis:#8994a8
+}
+[data-theme="dark"]{
+  --bg:#0d1117;--card:#151b24;--card-soft:#101620;--text:#edf2ff;--muted:#9eabc0;
+  --line:#2a3443;--accent:#8d8dff;--accent2:#35c7f0;--accent3:#ffad72;
+  --good:#72dfa8;--warn:#ffd27a;--bad:#ff9c9c;--shadow:0 16px 42px rgba(0,0,0,.32);
+  --hero1:#171b31;--hero2:#102a31;--hero3:#302117;--grid:#26303d;--axis:#78869a
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(91,91,247,.10), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(0,166,214,.10), transparent 24%),
+    var(--bg);
+  color:var(--text);transition:background .25s,color .25s
+}
+.topbar{
+  display:flex;justify-content:space-between;gap:24px;align-items:flex-start;
+  padding:34px clamp(20px,5vw,64px) 22px;
+  background:linear-gradient(120deg,var(--hero1),var(--hero2) 55%,var(--hero3));
+  border-bottom:1px solid var(--line)
+}
+.eyebrow{font-size:.8rem;font-weight:900;letter-spacing:.11em;color:var(--accent);text-transform:uppercase}
+.topbar h1{font-size:clamp(2.2rem,4vw,3.5rem);margin:.28rem 0 .35rem;line-height:1.02}
+.topbar p{margin:0;color:var(--muted);font-size:1.05rem}
+.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.theme-toggle{
+  background:var(--card);color:var(--text);border:1px solid var(--line);
+  padding:12px 16px;border-radius:14px;font-weight:900;box-shadow:var(--shadow)
+}
+.layout{
+  display:grid;grid-template-columns:290px 1fr;gap:24px;padding:26px clamp(20px,5vw,64px) 42px;
+  max-width:1500px;margin:auto
+}
+.panel,.content{
+  background:color-mix(in srgb,var(--card) 94%, transparent);border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(8px)
+}
+.controls{padding:22px;position:sticky;top:16px;height:max-content}
+.controls h2{margin:0 0 8px}
+.helper{font-size:.9rem;color:var(--muted);line-height:1.45;margin:0 0 8px}
+.controls label,.prediction-controls label{
+  display:flex;justify-content:space-between;gap:12px;margin-top:18px;font-weight:800
+}
+.controls input,.prediction-controls input{width:100%;accent-color:var(--accent)}
+button{
+  border:0;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;
+  padding:11px 15px;border-radius:12px;font-weight:900;cursor:pointer;
+  transition:transform .15s ease,filter .15s ease,box-shadow .15s ease
+}
+button:hover{filter:brightness(1.04);transform:translateY(-1px);box-shadow:0 8px 20px rgba(91,91,247,.18)}
+.content{padding:20px;min-width:0}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}
+.tab{background:var(--card-soft);color:var(--text);border:1px solid var(--line)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent}
+.tab-panel{display:none;padding:24px 2px 4px;animation:fadeIn .2s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:.45;transform:translateY(3px)}to{opacity:1;transform:none}}
+.learn-card{
+  border:1px solid var(--line);border-radius:20px;padding:24px;
+  background:linear-gradient(135deg,var(--hero1),var(--card) 60%,var(--hero2))
+}
+.badge{
+  display:inline-block;font-size:.76rem;font-weight:900;color:white;letter-spacing:.08em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));padding:7px 10px;border-radius:999px
+}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.info-card,.chart-card,.metric,.prediction-controls{
+  border:1px solid var(--line);border-radius:18px;background:var(--card)
+}
+.info-card{padding:18px;transition:transform .15s ease,border-color .15s ease}
+.info-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent) 38%,var(--line))}
+.info-card h3{margin-top:0}
+.info-card:nth-child(1){box-shadow:inset 0 4px 0 var(--accent)}
+.info-card:nth-child(2){box-shadow:inset 0 4px 0 var(--accent2)}
+.info-card:nth-child(3){box-shadow:inset 0 4px 0 var(--accent3)}
+.formula{
+  font-size:clamp(2rem,5vw,4rem);font-family:Georgia,serif;text-align:center;padding:28px;margin:18px 0;
+  border-radius:20px;background:linear-gradient(135deg,var(--card-soft),var(--hero1));border:1px dashed var(--line)
+}
+.section-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.callout{
+  display:inline-flex;align-items:center;gap:8px;background:var(--card-soft);border:1px solid var(--line);
+  border-radius:999px;padding:8px 11px;color:var(--muted);font-size:.9rem;font-weight:800
+}
+.chart-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(220px,1fr);gap:18px}
+.chart-card{padding:12px;overflow:hidden;background:linear-gradient(180deg,var(--card),var(--card-soft))}
+.chart-card svg{width:100%;height:auto;display:block}
+.metrics{display:grid;gap:10px}
+.metric{padding:14px;position:relative;overflow:hidden}
+.metric::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--accent),var(--accent2))}
+.metric span{display:block;color:var(--muted);font-size:.86rem}
+.metric strong{font-size:1.5rem}
+.feedback{padding:14px 16px;border-radius:14px;margin-top:14px;border:1px solid var(--line)}
+.feedback.good{background:color-mix(in srgb,var(--good) 10%,var(--card));color:var(--good);border-color:color-mix(in srgb,var(--good) 38%,var(--line))}
+.feedback.warn{background:color-mix(in srgb,var(--warn) 10%,var(--card));color:var(--warn);border-color:color-mix(in srgb,var(--warn) 38%,var(--line))}
+.feedback.bad{background:color-mix(in srgb,var(--bad) 10%,var(--card));color:var(--bad);border-color:color-mix(in srgb,var(--bad) 38%,var(--line))}
+.feedback.neutral{background:var(--card-soft);color:var(--muted)}
+.prediction-controls{padding:20px;margin-bottom:16px;background:linear-gradient(135deg,var(--card),var(--hero2))}
+.prediction-controls button{margin-top:14px}
+.data-details{margin-top:24px}
+.table-wrap{overflow:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+details{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card-soft)}
+summary{font-weight:900;cursor:pointer}
+footer{text-align:center;color:var(--muted);padding:0 20px 32px}
+.axis{stroke:var(--axis);stroke-width:1.2}.grid{stroke:var(--grid);stroke-width:1}
+.reg-line{stroke:var(--accent);stroke-width:4;fill:none}.residual{stroke:var(--axis);stroke-width:1.4;stroke-dasharray:4 5}
+.point{fill:var(--text);stroke:var(--card);stroke-width:2}.prediction-point{fill:var(--card);stroke:var(--accent2);stroke-width:5}
+.tick{font-size:13px;fill:var(--muted)}.axis-label{font-size:14px;font-weight:700;fill:var(--muted)}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}.controls{position:static}.chart-grid{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr}.topbar{flex-direction:column}.header-actions{align-self:flex-start}
+}
 </style>
 </head>
 <body>
@@ -21,14 +135,14 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
     <div>
       <div class="eyebrow">ML Learning Lab · Projekt 1</div>
       <h1>📈 Linear Regression Trainer</h1>
-      <p>Verstehen → ausprobieren → selbst vorhersagen → Wissen testen</p>
+      <p>Verstehen → ausprobieren → selbst vorhersagen</p>
     </div>
-    <div class="score-card">🏆 Lernpunkte <strong id="score">0</strong></div>
+    <div class="header-actions"><button id="themeToggle" class="theme-toggle" type="button">🌙 Dunkelmodus</button></div>
   </header>
 
   <main class="layout">
     <aside class="panel controls">
-      <h2>🎛️ Daten-Labor</h2>
+      <h2>🎛️ Daten-Labor</h2><p class="helper">Verändere die Regler und beobachte sofort, wie sich Daten, Gerade und Kennzahlen ändern.</p>
       <label>Anzahl Datenpunkte <span id="numPointsValue">12</span></label>
       <input id="numPoints" type="range" min="5" max="40" value="12" step="1" />
 
@@ -43,8 +157,6 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
 
       <label>Zufalls-Seed <span id="seedValue">42</span></label>
       <input id="seed" type="range" min="0" max="100" value="42" step="1" />
-
-      <button id="resetScore" class="secondary">Punkte zurücksetzen</button>
     </aside>
 
     <section class="content">
@@ -52,7 +164,6 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
         <button class="tab active" data-tab="understand">1️⃣ Verstehen</button>
         <button class="tab" data-tab="explore">2️⃣ Ausprobieren</button>
         <button class="tab" data-tab="predict">3️⃣ Vorhersagen</button>
-        <button class="tab" data-tab="quiz">4️⃣ Quiz</button>
       </nav>
 
       <section id="understand" class="tab-panel active">
@@ -72,7 +183,7 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
 
       <section id="explore" class="tab-panel">
         <div class="section-head">
-          <div><h2>🎛️ Verändere die Daten</h2><p>Ändere links die Regler. Beobachte besonders, was bei mehr Rauschen mit R² passiert.</p></div>
+          <div><h2>🎛️ Verändere die Daten</h2><p>Ändere links die Regler. Beobachte besonders, was bei mehr Rauschen mit R² passiert.</p><span class="callout">💡 Tipp: Erst Rauschen verändern, dann Steigung.</span></div>
         </div>
         <div class="chart-grid">
           <div class="chart-card"><svg id="exploreChart" viewBox="0 0 800 480" role="img" aria-label="Datenpunkte mit Regressionsgerade"></svg></div>
@@ -100,14 +211,6 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
         </div>
         <div class="chart-card"><svg id="predictChart" viewBox="0 0 800 430" role="img" aria-label="Vorhersage auf Regressionsgerade"></svg></div>
       </section>
-
-      <section id="quiz" class="tab-panel">
-        <h2>🧠 Anfänger-Quiz</h2>
-        <p>Für jede richtige Antwort gibt es einmalig <strong>10 Punkte</strong>.</p>
-        <div id="quizContainer"></div>
-        <div id="quizSummary" class="feedback neutral"></div>
-      </section>
-
       <details class="data-details">
         <summary>📋 Aktuelle Beispieldaten anzeigen</summary>
         <div class="table-wrap"><table><thead><tr><th>x</th><th>y</th><th>Modellvorhersage</th><th>Residuum</th></tr></thead><tbody id="dataRows"></tbody></table></div>
@@ -118,7 +221,16 @@ button{border:0;background:var(--accent);color:white;padding:11px 15px;border-ra
   <footer>ML Learning Lab · Projekt 1 · Linear Regression · Läuft komplett im Browser</footer>
   <script>
 const $ = (id) => document.getElementById(id);
-const state = { score: 0, answered: new Set(), data: [], model: null };
+const state = { data: [], model: null };
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme',theme);
+  const btn=$('themeToggle');
+  if(btn) btn.textContent=theme==='dark'?'☀️ Hellmodus':'🌙 Dunkelmodus';
+}
+const savedTheme=localStorage.getItem('ml-theme');
+const initialTheme=savedTheme||(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+applyTheme(initialTheme);
 
 function mulberry32(seed){return function(){let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 function gaussian(rand){let u=0,v=0;while(u===0)u=rand();while(v===0)v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
@@ -204,29 +316,22 @@ function syncGuessRange(){
 
 function checkPrediction(){
   const x=+$('predictionX').value,guess=+$('guess').value,pred=state.model.intercept+state.model.slope*x,error=Math.abs(guess-pred),box=$('predictionFeedback');
-  if(error<=1){box.className='feedback good';box.innerHTML=`Sehr gut! Deine Schätzung <strong>${guess.toFixed(1)}</strong> liegt sehr nah an <strong>${pred.toFixed(1)}</strong>.`;award('prediction')}
+  if(error<=1){box.className='feedback good';box.innerHTML=`Sehr gut! Deine Schätzung <strong>${guess.toFixed(1)}</strong> liegt sehr nah an <strong>${pred.toFixed(1)}</strong>.`}
   else if(error<=3){box.className='feedback warn';box.innerHTML=`Fast! Das Modell sagt ungefähr <strong>${pred.toFixed(1)}</strong> voraus.`}
   else{box.className='feedback bad';box.innerHTML=`Noch nicht. Das Modell sagt ungefähr <strong>${pred.toFixed(1)}</strong> voraus. Achte auf Steigung und Achsenabschnitt.`}
 }
-function award(key){if(!state.answered.has(key)){state.answered.add(key);state.score+=10;$('score').textContent=state.score;updateQuizSummary()}}
-
-const questions=[
-  {key:'q1',q:'Was sagt eine lineare Regression typischerweise voraus?',options:['Eine Klasse','Einen kontinuierlichen Zahlenwert','Ein Bild'],correct:1,ok:'Genau. Beispiele sind Preis, Temperatur, Gewicht oder Verbrauch.'},
-  {key:'q2',q:'Was bedeutet eine positive Steigung?',options:['Wenn x steigt, steigt y tendenziell','Wenn x steigt, fällt y immer','x und y haben keinen Zusammenhang'],correct:0,ok:'Richtig. Eine positive Steigung bedeutet einen positiven linearen Zusammenhang.'},
-  {key:'q3',q:'Was passiert meistens, wenn das Rauschen stark zunimmt?',options:['Die Punkte liegen näher an der Geraden','Die Daten streuen stärker und das Modell passt oft schlechter','Die Steigung wird automatisch null'],correct:1,ok:'Richtig. Mehr Streuung erschwert eine präzise lineare Anpassung.'}
-];
-function buildQuiz(){
-  const c=$('quizContainer');c.innerHTML='';questions.forEach((q,qi)=>{const card=document.createElement('div');card.className='quiz-card';card.innerHTML=`<h3>${qi+1}. ${q.q}</h3>`;q.options.forEach((opt,oi)=>{const label=document.createElement('label');label.className='option';label.innerHTML=`<input type="radio" name="${q.key}" value="${oi}"> ${opt}`;label.querySelector('input').addEventListener('change',()=>answerQuiz(q,oi,card));card.appendChild(label)});const fb=document.createElement('div');fb.className='feedback neutral';fb.textContent='Wähle eine Antwort.';fb.dataset.feedback='1';card.appendChild(fb);c.appendChild(card)});updateQuizSummary()}
-function answerQuiz(q,oi,card){const fb=card.querySelector('[data-feedback]');if(oi===q.correct){fb.className='feedback good';fb.textContent=q.ok;award(q.key)}else{fb.className='feedback bad';fb.textContent='Noch nicht richtig. Probiere es erneut und nutze die Erklärung aus Schritt 1.'}}
-function updateQuizSummary(){const q=$('quizSummary');if(state.score>=30){q.className='feedback good';q.textContent=`🏆 Stark! Du hast aktuell ${state.score} Punkte gesammelt.`}else{q.className='feedback neutral';q.textContent=`Aktueller Punktestand: ${state.score}. Ziel: mindestens 30 Punkte.`}}
 function fillTable(){const body=$('dataRows');body.innerHTML='';state.data.forEach((d,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${d.x.toFixed(2)}</td><td>${d.y.toFixed(2)}</td><td>${state.model.preds[i].toFixed(2)}</td><td>${state.model.residuals[i].toFixed(2)}</td>`;body.appendChild(tr)})}
 
 ['numPoints','slope','intercept','noise','seed'].forEach(id=>$(id).addEventListener('input',regenerate));
 $('predictionX').addEventListener('input',()=>{syncGuessRange();drawAll()});$('guess').addEventListener('input',()=>{$('guessValue').textContent=(+$('guess').value).toFixed(1)});$('checkPrediction').addEventListener('click',checkPrediction);
-$('resetScore').addEventListener('click',()=>{state.score=0;state.answered.clear();$('score').textContent='0';document.querySelectorAll('#quizContainer input').forEach(i=>i.checked=false);document.querySelectorAll('#quizContainer [data-feedback]').forEach(f=>{f.className='feedback neutral';f.textContent='Wähle eine Antwort.'});$('predictionFeedback').className='feedback neutral';$('predictionFeedback').textContent='Schätze zuerst einen Wert und prüfe anschließend.';updateQuizSummary()});
+$('themeToggle').addEventListener('click',()=>{
+  const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  localStorage.setItem('ml-theme',next);
+  applyTheme(next);
+});
 document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');$(btn.dataset.tab).classList.add('active')}));
 
-buildQuiz();regenerate();
+regenerate();
 </script>
 </body>
 </html>
